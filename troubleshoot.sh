@@ -4,7 +4,7 @@
 # tests connectivity to help diagnose issues when the relay
 # server cannot be reached.
 
-set -euo pipefail
+set -uo pipefail
 
 REPORT="troubleshoot_report_$(date +%Y%m%d_%H%M%S).txt"
 
