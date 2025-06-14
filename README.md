@@ -106,5 +106,5 @@ The script collects container status, recent logs and basic network tests. The o
 
 If any of the commands used by the script are missing, install them on Ubuntu with:
 ```
-sudo apt-get update && sudo apt-get install -y iproute2 iptables curl docker-compose
+sudo apt-get update && sudo apt-get install -y iproute2 iputils-ping iptables curl docker-compose
 ```
