@@ -66,7 +66,7 @@ while True:
             ips = [ipv4_address]
             use_ipv6 = False
 
-        env = Environment(loader=FileSystemLoader('.'))
+        env = Environment(loader=FileSystemLoader('.'), keep_trailing_newline=True)
         template = env.get_template(template_file)
         rendered = template.render(ips=ips, use_ipv6=use_ipv6)
 

@@ -96,3 +96,15 @@ Apply the changes with this command:
 ```
 sysctl -p /etc/sysctl.d/99-tune-network.conf
 ```
+## Troubleshooting
+
+After the containers are running, you can generate a detailed report to help diagnose connectivity problems. Run:
+```
+./troubleshoot.sh
+```
+The script collects container status, recent logs and basic network tests. The output is saved to a file named `troubleshoot_report_DATE.txt`.
+
+If any of the commands used by the script are missing, install them on Ubuntu with:
+```
+sudo apt-get update && sudo apt-get install -y iproute2 iptables curl docker-compose
+```
