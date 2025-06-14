@@ -3,6 +3,7 @@ import random
 import subprocess
 import os
 import time
+import socket
 from jinja2 import Environment, FileSystemLoader
 import signal
 import sys
@@ -26,6 +27,15 @@ def generate_random_ipv6(subnet):
     except ipaddress.AddressValueError:
         raise ValueError("Invalid subnet provided")
 
+def check_ipv6_connectivity(addr, port=80, timeout=3):
+    try:
+        with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as sock:
+            sock.settimeout(timeout)
+            sock.connect((str(addr), port))
+        return True
+    except Exception:
+        return False
+
 def check_template_file_exists(file_path):
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"Template file not found: {file_path}")
@@ -38,6 +48,7 @@ try:
         raise ValueError("SUBNET environment variable must be set")
     ip_count = int(get_env_var("IP_COUNT", 100))
     interval = int(get_env_var("INTERVAL", 3600))
+    ipv4_address = get_env_var("IPV4_ADDRESS")
 except Exception as e:
     print(e)
     exit(1)
@@ -45,11 +56,19 @@ except Exception as e:
 while True:
     try:
         check_template_file_exists(template_file)
-        random_ips = [str(generate_random_ipv6(subnet)) for _ in range(ip_count)]
+        test_ip = generate_random_ipv6(subnet)
+        if check_ipv6_connectivity(test_ip):
+            ips = [str(generate_random_ipv6(subnet)) for _ in range(ip_count)]
+            use_ipv6 = True
+        else:
+            if not ipv4_address:
+                raise ValueError("IPV4_ADDRESS must be set for IPv4 fallback")
+            ips = [ipv4_address]
+            use_ipv6 = False
 
         env = Environment(loader=FileSystemLoader('.'))
         template = env.get_template(template_file)
-        rendered = template.render(ips=random_ips)
+        rendered = template.render(ips=ips, use_ipv6=use_ipv6)
 
         with open(output_file, 'w') as file:
             file.write(rendered)

@@ -55,8 +55,11 @@ Edit the `config.env` file and update `SUBNET` with the IPv6 subnet of the remot
 SUBNET=2001:DB8::/64
 IP_COUNT=100
 INTERVAL=3600
+IPV4_ADDRESS=203.0.113.10
 ```
 Replace `2001:DB8::/64` with the IPv6 range assigned to your server, noting that it is a network address that ends with `::`.
+
+`IPV4_ADDRESS` is used as a fallback when the generator cannot reach any IPv6 address from `SUBNET`.
 
 Now, you can run Docker Compose to start HAProxy and its config generator:
 ```

@@ -23,11 +23,11 @@ frontend https_front
 backend http_back
     balance random
     {%- for ip in ips %}
-    server server{{ loop.index }} [{{ ip }}]:80 check inter 10s
+    server srv{{ loop.index }} {% if use_ipv6 %}[{{ ip }}]{% else %}{{ ip }}{% endif %}:80 check inter 10s
     {%- endfor %}
 
 backend https_back
     balance random
     {%- for ip in ips %}
-    server server{{ loop.index }} [{{ ip }}]:443 check-ssl verify none inter 10s
+    server srv{{ loop.index }} {% if use_ipv6 %}[{{ ip }}]{% else %}{{ ip }}{% endif %}:443 check-ssl verify none inter 10s
     {%- endfor %}

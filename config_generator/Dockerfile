@@ -6,4 +6,5 @@ RUN apk add --no-cache docker-cli-compose && \
 ENV SUBNET ""
 ENV IP_COUNT 100
 ENV INTERVAL 3600
+ENV IPV4_ADDRESS ""
 CMD ["python", "-u", "./app.py"]
